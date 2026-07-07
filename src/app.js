@@ -33,6 +33,14 @@ const moveFile = async () => {
 
     if (newPath.endsWith(path.sep)) {
       isDestinationDirectory = true;
+
+      try {
+        if (!fs.access(newPath)) {
+          throw new Error('Wrong destination directory');
+        }
+      } catch (err) {
+        throw new Error(err.message);
+      }
     } else {
       // Якщо слешу немає, намагаємося перевірити, чи це вже існуюча директорія
       try {
