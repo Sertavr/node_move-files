@@ -35,11 +35,15 @@ const moveFile = async () => {
       isDestinationDirectory = true;
 
       try {
-        if (!fs.access(newPath)) {
-          throw new Error('Wrong destination directory');
+        const statD = await fs.stat(newPath);
+
+        await fs.access(newPath);
+
+        if (!statD.isFile()) {
+          throw new Error('Destination directory does not exist');
         }
       } catch (err) {
-        throw new Error(err.message);
+        throw new Error('Destination directory does not exist');
       }
     } else {
       // Якщо слешу немає, намагаємося перевірити, чи це вже існуюча директорія
